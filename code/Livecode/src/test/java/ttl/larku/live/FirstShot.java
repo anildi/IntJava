@@ -10,6 +10,7 @@ public class FirstShot {
     @Test
     public void firstGuy() {
         System.out.println("Here we go");
+
     }
 
 }
