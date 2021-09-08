@@ -17,6 +17,14 @@ public class Track {
 		super();
 	}
 
+	public Track(String title) {
+
+	}
+
+	public Track(String title, String album) {
+
+	}
+
 	public Track(String title, List<String> artists, String album, String durStr, String dateStr) {
 		Duration duration = hmsToDuration(durStr);
 		LocalDate date = LocalDate.parse(dateStr);

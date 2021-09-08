@@ -1,6 +1,5 @@
 package ttl.larku.livedemo.dao;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ttl.larku.livedemo.domain.Student;
 
@@ -17,7 +16,7 @@ public class StudentDaoTest {
 
     @Test
     public void testCreateAndGet() {
-        StudentDao studentDao = new StudentDao();
+        InMemoryStudentDao studentDao = new InMemoryStudentDao();
         //Student student = new Student(1, "Joey", LocalDate.of(1999, 10, 10), Student.Status.FULL_TIME);
         Student student = new Student("Joey", LocalDate.of(1999, 10, 10), Student.Status.FULL_TIME);
 
@@ -33,7 +32,7 @@ public class StudentDaoTest {
 
     @Test
     public void testUpdateStudentGood() {
-        StudentDao studentDao = new StudentDao();
+        InMemoryStudentDao studentDao = new InMemoryStudentDao();
         Student student = new Student("Joey", LocalDate.of(1999, 10, 10), Student.Status.FULL_TIME);
 
         student = studentDao.insert(student);
@@ -54,7 +53,7 @@ public class StudentDaoTest {
 
     @Test
     public void testUpdateStudentNonExistent() {
-        StudentDao studentDao = new StudentDao();
+        InMemoryStudentDao studentDao = new InMemoryStudentDao();
         Student student = new Student("Joey", LocalDate.of(1999, 10, 10), Student.Status.FULL_TIME);
 
         studentDao.insert(student);
