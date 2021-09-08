@@ -26,12 +26,12 @@ public class Student {
     public Student() {
     }
 
-    public Student(int id, String name, LocalDate dob, Status status) {
-        this(id, name, dob, status, new ArrayList<>());
+    public Student(String name, LocalDate dob, Status status) {
+        this(name, dob, status, new ArrayList<>());
     }
 
-    public Student(int id, String name, LocalDate dob, Status status, String ... phoneNumbers) {
-        this(id, name, dob, status, new ArrayList<>());
+    public Student(String name, LocalDate dob, Status status, String ... phoneNumbers) {
+        this(name, dob, status, new ArrayList<>());
         this.id = id;
         this.name = name;
         this.dob = dob;
@@ -39,7 +39,7 @@ public class Student {
         this.phoneNumbers.addAll(Arrays.asList(phoneNumbers));
     }
 
-    public Student(int id, String name, LocalDate dob, Status status, List<String> phoneNumbers) {
+    public Student(String name, LocalDate dob, Status status, List<String> phoneNumbers) {
         //init(id, name, dob, status, phoneNumbers);
         this.id = id;
         this.name = name;
@@ -48,7 +48,7 @@ public class Student {
         this.status = status;
     }
 
-    public void init(int id, String name, LocalDate dob, Status status, List<String> phoneNumbers) {
+    public void init(String name, LocalDate dob, Status status, List<String> phoneNumbers) {
         this.id = id;
         this.name = name;
         this.dob = dob;

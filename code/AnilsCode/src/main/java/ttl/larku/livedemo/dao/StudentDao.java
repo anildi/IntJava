@@ -13,8 +13,12 @@ import java.util.Map;
  */
 public class StudentDao {
     private Map<Integer, Student> students = new HashMap<>();
+    private static int nextId = 1;
+
 
     public Student insert(Student student) {
+        int id = nextId++;
+        student.setId(id);
         students.put(student.getId(), student);
         return student;
     }
@@ -25,7 +29,7 @@ public class StudentDao {
 
     //TODO - fixme
     public boolean update(Student student) {
-        if(!students.containsKey(student.getId())) {
+        if(students.containsKey(student.getId())) {
             students.put(student.getId(), student);
             return true;
         }
@@ -36,9 +40,20 @@ public class StudentDao {
         return students.get(id);
     }
 
+    private List<Student> studentsToo = new ArrayList<>();
+
     public List<Student> getAll() {
-        List<Student> all = new ArrayList<>(students.values());
+//        return List.copyOf(studentsToo);
+        List<Student> all = List.copyOf(students.values());
         return all;
     }
 }
+
+
+
+
+
+
+
+
 
