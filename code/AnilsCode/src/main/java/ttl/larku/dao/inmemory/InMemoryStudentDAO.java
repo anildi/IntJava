@@ -28,7 +28,6 @@ public class InMemoryStudentDAO implements BaseDAO<Student>{
 		//Create a new Id
 		int newId = nextId.getAndIncrement();
 		newObject.setId(newId);
-		newObject.setName("InMem" + newObject.getName());
 		students.put(newId, newObject);
 		
 		return newObject;
