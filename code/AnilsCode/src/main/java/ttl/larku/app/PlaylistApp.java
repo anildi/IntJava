@@ -98,8 +98,8 @@ public class PlaylistApp {
                 .map(e -> {
                     List<String> al = e.getValue().stream().flatMap(t -> t.getArtists().stream())
                             .collect(Collectors.toList());
-                    Map.Entry<Boolean, List<String>> en = new AbstractMap.SimpleImmutableEntry(e.getKey(),
-                            al);
+                    Map.Entry<Boolean, List<String>> en = new AbstractMap.SimpleImmutableEntry<Boolean, List<String>>(e.getKey(), al);
+//                    Map.Entry<Boolean, List<String>> en = Map.entry(e.getKey(), al);
                     return en;
 
                 }).collect(Collectors.toMap(en -> en.getKey(), en -> en.getValue()));
