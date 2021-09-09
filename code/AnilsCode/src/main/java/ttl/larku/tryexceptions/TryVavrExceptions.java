@@ -47,9 +47,9 @@ public class TryVavrExceptions {
     }
 
     public static void callFilesWithExceptionsVavr(List<String> fileNames) {
-        List<Try<String>> firstChars = filesWithExceptionsVavr(fileNames);
+        List<Try<String>> firstLines = filesWithExceptionsVavr(fileNames);
 
-        firstChars.stream()
+        firstLines.stream()
                 .map(tw -> tw.map(String::toUpperCase))
                 .forEach(tw -> {
                     tw.onSuccess(firstLine -> {//send to DB

@@ -30,9 +30,9 @@ public class ExceptionsWithOptional {
 
     public static void callFileTheOldWay(List<String> fileNames) {
         try {
-            List<String> firstChars = filesTheOldWay(fileNames);
-            //List<Character> firstChars = filesWithLambdasTheWrongWay(fileNames);
-            firstChars.stream().map(String::toUpperCase).forEach(ch -> {
+            List<String> firstLines = filesTheOldWay(fileNames);
+            //List<Character> firstLines = filesWithLambdasTheWrongWay(fileNames);
+            firstLines.stream().map(String::toUpperCase).forEach(ch -> {
                 //put into DB
                 System.out.println(ch);
             });
@@ -44,18 +44,18 @@ public class ExceptionsWithOptional {
     }
 
     public static List<String> filesTheOldWay(List<String> fileNames) throws IOException {
-        List<String> firstChars = new ArrayList<>();
+        List<String> firstLines = new ArrayList<>();
         for (String fileName : fileNames) {
             try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
                 String ch = reader.readLine();
-                firstChars.add(ch);
+                firstLines.add(ch);
             }
         }
-        return firstChars;
+        return firstLines;
     }
 
     public static List<String> filesWithLambdasTheWrongWay(List<String> fileNames) {
-        List<String> firstChars = fileNames.stream().map(fileName -> {
+        List<String> firstLines = fileNames.stream().map(fileName -> {
             try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
                 String line = reader.readLine();
                 return line;
@@ -64,14 +64,13 @@ public class ExceptionsWithOptional {
             }
         }).collect(toList());
 
-        return firstChars;
+        return firstLines;
     }
 
 
     public static List<Optional<String>> filesWithLambdasWithOptional(List<String> fileNames) {
 
-
-        List<Optional<String>> firstChars = fileNames.stream()
+        List<Optional<String>> firstLines = fileNames.stream()
                 .map(fileName -> {
                     try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
                         String line = reader.readLine();
@@ -82,7 +81,7 @@ public class ExceptionsWithOptional {
                     }
                 }).collect(toList());
 
-        return firstChars;
+        return firstLines;
     }
 
     public static void callFileWrappedOptional(List<String> fileNames) {
@@ -93,14 +92,14 @@ public class ExceptionsWithOptional {
                 .map(Optional::get)
                 .forEach(ch -> {
                     //send to DB
-                    System.out.println("ch: " + ch);
+                    System.out.println("line: " + ch);
                 });
 
     }
 
     public static List<Wrapper> filesWithLambdasWithWrapper(List<String> fileNames) {
 
-        List<Wrapper> firstChars = fileNames.stream()
+        List<Wrapper> firstLines = fileNames.stream()
                 .map(fileName -> {
                     try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
                         String line = reader.readLine();
@@ -111,7 +110,7 @@ public class ExceptionsWithOptional {
                     }
                 }).collect(toList());
 
-        return firstChars;
+        return firstLines;
     }
 
     public static void callFileWrappedTheHardWay(List<String> fileNames) {
@@ -152,8 +151,8 @@ public class ExceptionsWithOptional {
 
 
 
-        private Wrapper(String ch) {
-            line = ch;
+        private Wrapper(String line) {
+            this.line = line;
         }
 
         private Wrapper(Exception e) {
@@ -161,8 +160,8 @@ public class ExceptionsWithOptional {
         }
 
 
-        public static Wrapper of(String ch) {
-            return new Wrapper(ch);
+        public static Wrapper of(String line) {
+            return new Wrapper(line);
         }
 
         public Wrapper flatMap(Function<String, Wrapper> func) {
