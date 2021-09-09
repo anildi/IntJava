@@ -41,7 +41,7 @@ public class ExceptionsExtra {
     // give you both the errors and the failures?
     //Note - One way to do this is to return a List of Try objects.
     // Variations on that might be to process the Try's here and return
-    // the back something that is simpler to deal with. -- Extra Credit
+    // back something that is simpler to deal with. -- Extra Credit
     public List<Try<String>> processAddressesForSuccessAndErrors() {
         List<Try<String>> results = siteAddresses.stream()
                 .map(address -> Try.of(() -> connectAndGetResult(address)))

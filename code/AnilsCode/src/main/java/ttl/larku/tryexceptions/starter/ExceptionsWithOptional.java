@@ -24,8 +24,8 @@ public class ExceptionsWithOptional {
     public static void main(String[] args) {
         List<String> fileNames = Arrays.asList(".gitignore", "doesNotExist", "pom.xml");
 //        callFileTheOldWay(fileNames);
-        callFileWrappedOptional(fileNames);
-//        callFileWrapped(fileNames);
+//        callFileWrappedOptional(fileNames);
+        callFileWrapped(fileNames);
     }
 
     public static void callFileTheOldWay(List<String> fileNames) {
