@@ -4,8 +4,8 @@ import java.util.List;
 
 /**
  * TODO - Comments indicate where you need to make changes. In some places code is
- * commented out and you need to uncomment it and make it work.
- * In other places you need to make changes to compiling code.
+ *  commented out and you need to uncomment it and make it work.
+ *  In other places you need to make changes to existing code.
  *
  * @author whynot
  */
