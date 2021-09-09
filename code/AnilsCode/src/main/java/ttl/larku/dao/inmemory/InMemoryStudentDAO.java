@@ -7,27 +7,28 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class InMemoryStudentDAO implements BaseDAO<Student>{
 
-	private Map<Integer, Student> students = new HashMap<Integer, Student>();
-	private static AtomicInteger nextId = new AtomicInteger(0);
-	
-	public void update(Student updateObject) {
-		if(students.containsKey(updateObject.getId())) {
-			students.put(updateObject.getId(), updateObject);
-		}
+	private Map<Integer, Student> students = new ConcurrentHashMap<>();
+	private static AtomicInteger nextId = new AtomicInteger(1);
+
+	@Override
+	public boolean update(Student updateObject) {
+		return students.computeIfPresent(updateObject.getId(), (k, oldValue) -> updateObject) != null;
 	}
 
-	public void delete(Student student) {
-		students.remove(student.getId());
+	public boolean delete(Student student) {
+		return students.remove(student.getId()) == null;
 	}
 
 	public Student create(Student newObject) {
 		//Create a new Id
-		int newId = nextId.incrementAndGet();
+		int newId = nextId.getAndIncrement();
 		newObject.setId(newId);
+		newObject.setName("InMem" + newObject.getName());
 		students.put(newId, newObject);
 		
 		return newObject;
@@ -47,8 +48,8 @@ public class InMemoryStudentDAO implements BaseDAO<Student>{
 	}
 
 	public void createStore() {
-		students = new HashMap<Integer, Student>();
-		nextId.set(0);
+		students = new ConcurrentHashMap<>();
+		nextId.set(1);
 	}
 
 	public Map<Integer, Student> getStudents() {

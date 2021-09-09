@@ -4,28 +4,28 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import ttl.larku.dao.BaseDAO;
 import ttl.larku.domain.Course;
 
 public class JpaCourseDAO implements BaseDAO<Course>{
 
-	private Map<Integer, Course> courses = new HashMap<Integer, Course>();
-	private static int nextId = 0;
+	private Map<Integer, Course> courses = new ConcurrentHashMap<>();
+	private AtomicInteger nextId = new AtomicInteger(1);
 	
-	public void update(Course updateObject) {
-		if(courses.containsKey(updateObject.getId())) {
-			courses.put(updateObject.getId(), updateObject);
-		}
+	public boolean update(Course updateObject) {
+		return courses.computeIfPresent(updateObject.getId(), (k, oldValue) -> updateObject) != null;
 	}
 
-	public void delete(Course course) {
-		courses.remove(course.getId());
+	public boolean delete(Course course) {
+		return courses.remove(course.getId()) != null;
 	}
 
 	public Course create(Course newObject) {
 		//Create a new Id
-		int newId = nextId++;
+		int newId = nextId.getAndIncrement();
 		newObject.setId(newId);
 		newObject.setCode("Jpa" + newObject.getCode());
 		courses.put(newId, newObject);
@@ -46,7 +46,8 @@ public class JpaCourseDAO implements BaseDAO<Course>{
 	}
 	
 	public void createStore() {
-		courses = new HashMap<Integer, Course>();
+		courses = new ConcurrentHashMap<>();
+		nextId.set(1);
 	}
 	
 	public Map<Integer, Course> getCourses() {

@@ -35,15 +35,22 @@ public class TrackService {
 		return track;
 	}
 	
-	public void deleteTrack(int id) {
+	public boolean deleteTrack(int id) {
 		Track track = trackDAO.get(id);
 		if(track != null) {
 			trackDAO.delete(track);
+			return true;
 		}
+		return false;
 	}
 	
-	public void updateTrack(Track track) {
-		trackDAO.update(track);
+	public boolean updateTrack(Track track) {
+		Track oldTrack = trackDAO.get(track.getId());
+		if(oldTrack != null) {
+			trackDAO.update(track);
+			return true;
+		}
+		return false;
 	}
 	
 	public Track getTrack(int id) {

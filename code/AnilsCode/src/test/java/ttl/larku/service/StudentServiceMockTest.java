@@ -7,8 +7,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
 import ttl.larku.dao.inmemory.InMemoryStudentDAO;
 import ttl.larku.domain.Student;
 
@@ -17,12 +15,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
 
 
 @ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.LENIENT)
+//@MockitoSettings(strictness = Strictness.LENIENT)
 public class StudentServiceMockTest {
 
 	@Mock
@@ -49,73 +50,100 @@ public class StudentServiceMockTest {
 		students.add(getStudent);
 		students.add(newStudent);
 
-		Mockito.when(dao.get(goodId)).thenReturn(getStudent);
-		Mockito.when(dao.get(badId)).thenReturn(null);
-		Mockito.when(dao.create(Mockito.any())).thenReturn(newStudent);
-		Mockito.doNothing().when(dao).update(getStudent);
-		Mockito.when(dao.getAll()).thenReturn(students);
 	}
 	
 
 	@Test
 	public void getStudentGood() throws Exception{
+		//Set up Mocks
+		Mockito.when(dao.get(goodId)).thenReturn(getStudent);
+
+		//Call method and do JUnit assertions
 		Student result = studentService.getStudent(goodId);
 		assertEquals("Joe", result.getName());
-		//Mockito.verify(dao).get(Mockito.any(int.class));
+
+		//Do Mockito Verifications.
 		Mockito.verify(dao).get(goodId);
 	}
 	@Test
 	public void testGetStudentWithBadId() {
+		//Set up Mocks
+		Mockito.when(dao.get(badId)).thenReturn(null);
+
+		//Call method and do JUnit assertions
 		Student student = studentService.getStudent(badId);
-		
 		assertNull(student );
-		Mockito.verify(dao).get(Mockito.any(int.class));
+
+		//Do Mockito Verifications.
+		Mockito.verify(dao).get(badId);
 	}
 
 	@Test
 	public void testCreateStudent() {
-		Student student = studentService.createStudent("Sammy", LocalDate.of(1995, 5, 14), Student.Status.HIBERNATING, "982 749 0033");
-		
-		assertNotEquals(0, student.getId());
-		Mockito.verify(dao).create(Mockito.any(Student.class));
-	}
+		//Set up Mocks
+		Mockito.when(dao.create(newStudent)).thenReturn(newStudent);
 
-	@Test
-	public void testCreateStudentWithStudent() {
+		//Call method and do JUnit assertions
 		Student student = studentService.createStudent(newStudent);
-		
-		assertNotEquals(0, student.getId());
-		Mockito.verify(dao).create(Mockito.any(Student.class));
+
+		//Do Mockito Verifications.
+		Mockito.verify(dao).create(newStudent);
 	}
 
 	@Test
 	public void deleteGoodStudent() {
-		studentService.deleteStudent(goodId);
-		
+		//Set up Mocks
+		Mockito.when(dao.get(goodId)).thenReturn(getStudent);
+		Mockito.when(dao.delete(getStudent)).thenReturn(true);
+
+		//Call method and do JUnit assertions
+		boolean done = studentService.deleteStudent(goodId);
+		assertTrue(done);
+
+		//Do Mockito Verifications.
 		Mockito.verify(dao).get(goodId);
 		Mockito.verify(dao).delete(getStudent);
 	}
 
 	@Test
 	public void deleteStudentWithBadId() {
-		studentService.deleteStudent(badId);
-		
+		//Set up Mocks
+		Mockito.when(dao.get(badId)).thenReturn(null);
+
+		//Call method and do JUnit assertions
+		boolean done = studentService.deleteStudent(badId);
+		assertFalse(done);
+
+		//Do Mockito Verifications.
 		Mockito.verify(dao).get(badId);
+		Mockito.verify(dao, never()).delete(any());
 	}
 
 	@Test
 	public void testUpdateStudent() {
+		//Set up Mocks
+		Mockito.when(dao.get(goodId)).thenReturn(getStudent);
+		Mockito.when(dao.update(getStudent)).thenReturn(true);
+
+		//Call method and do JUnit assertions
 		Student student = studentService.getStudent(goodId);
-		studentService.updateStudent(student);
-		
+
+		boolean done = studentService.updateStudent(student);
+		assertTrue(done);
+
+		//Do Mockito Verifications.
 		Mockito.verify(dao).update(student);
 	}
 
 	@Test
 	public void testGetAll() {
+		//Set up Mocks
+		Mockito.when(dao.getAll()).thenReturn(students);
+
+		//Call method and do JUnit assertions
 		List<Student> students = studentService.getAllStudents();
-		
-		assertEquals(2, students.size());
+
+		//Do Mockito Verifications.
 		Mockito.verify(dao).getAll();
 	}
 }

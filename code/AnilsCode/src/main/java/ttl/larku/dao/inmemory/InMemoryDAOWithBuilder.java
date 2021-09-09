@@ -13,23 +13,23 @@ import java.util.stream.Collectors;
 public class InMemoryDAOWithBuilder implements BaseDAO<StudentWithBuilder>{
 
 	private Map<Integer, StudentWithBuilder> students = new ConcurrentHashMap<>();
-	private static AtomicInteger nextId = new AtomicInteger(0);
+	private static AtomicInteger nextId = new AtomicInteger(1);
 	
-	public void update(StudentWithBuilder newStudent) {
-	    students.computeIfPresent(newStudent.getId(), (k, oldStudent) -> newStudent);
+	public boolean update(StudentWithBuilder newStudent) {
+	    return students.computeIfPresent(newStudent.getId(), (k, oldStudent) -> newStudent) != null;
 //		if(students.containsKey(updateObject.getId())) {
 //			students.put(updateObject.getId(), updateObject);
 //		}
 	}
 
-	public void delete(StudentWithBuilder student) {
-		students.remove(student.getId());
+	public boolean delete(StudentWithBuilder student) {
+		return students.remove(student.getId()) != null;
 	}
 
 	public StudentWithBuilder create(StudentWithBuilder newObject) {
 		//Create a new Id
-		int newId = nextId.incrementAndGet();
-		StudentWithBuilder tmp = new StudentWithBuilder.Builder().id(newId).name(newObject.getName()).phoneNumber(newObject.getPhoneNumber())
+		int newId = nextId.getAndIncrement();
+		StudentWithBuilder tmp = new StudentWithBuilder.Builder().id(newId).name("InMemBuilder: " + newObject.getName()).phoneNumber(newObject.getPhoneNumber())
 				.status(newObject.getStatus()).build();
 		students.put(newId, newObject);
 		
@@ -55,12 +55,12 @@ public class InMemoryDAOWithBuilder implements BaseDAO<StudentWithBuilder>{
 
 	public void deleteStore() {
 		students = null;
-		nextId.set(0);
+		nextId.set(1);
 	}
 
 	public void createStore() {
 		students = new ConcurrentHashMap<>();
-		nextId.set(0);
+		nextId.set(1);
 	}
 
 	public Map<Integer, StudentWithBuilder> getStudents() {

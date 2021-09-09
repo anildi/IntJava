@@ -1,48 +1,38 @@
 package ttl.larku.dao.jpa;
 
+import ttl.larku.dao.BaseDAO;
+import ttl.larku.domain.Track;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import ttl.larku.dao.BaseDAO;
-import ttl.larku.domain.Track;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class JPATrackDAO implements BaseDAO<Track> {
 
 	private Map<Integer, Track> tracks = new HashMap<Integer, Track>();
-	private static int nextId = 0;
+	private static AtomicInteger nextId = new AtomicInteger(1);
 	
-	private String from;
-	public JPATrackDAO(String from) {
-		this.from = from + ": ";
-	}
-	
-	public JPATrackDAO() {
-		this("JPA");
+	@Override
+	public boolean update(Track updateObject) {
+		return tracks.computeIfPresent(updateObject.getId(), (k, oldValue) -> updateObject) != null;
 	}
 
 	@Override
-	public void update(Track updateObject) {
-		if(tracks.containsKey(updateObject.getId())) {
-			tracks.put(updateObject.getId(), updateObject);
-		}
-	}
-
-	@Override
-	public void delete(Track track) {
-		tracks.remove(track.getId());
+	public boolean delete(Track track) {
+		return tracks.remove(track.getId()) != null;
 	}
 
 	@Override
 	public Track create(Track newObject) {
 		//Create a new Id
-		int newId = ++nextId;
+		int newId = nextId.getAndIncrement();
 		newObject.setId(newId);
+		newObject.setAlbum("JPA: " + newObject.getAlbum());
 		tracks.put(newId, newObject);
 		
-		//Put our Mark
-		newObject.setTitle(from + newObject.getTitle());
 		return newObject;
 	}
 
@@ -56,13 +46,22 @@ public class JPATrackDAO implements BaseDAO<Track> {
 		return new ArrayList<Track>(tracks.values());
 	}
 	
-
 	public Map<Integer, Track> getTracks() {
-		nextId = 0;
+		nextId.set(1);
 		return tracks;
 	}
 
 	public void setTracks(Map<Integer, Track> tracks) {
 		this.tracks = tracks;
+	}
+	
+	public void deleteStore() {
+		tracks = null;
+		nextId.set(1);
+	}
+	
+	public void createStore() {
+		tracks = new ConcurrentHashMap<>();
+		nextId.set(1);
 	}
 }

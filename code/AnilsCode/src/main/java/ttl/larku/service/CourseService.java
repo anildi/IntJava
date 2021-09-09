@@ -1,10 +1,10 @@
 package ttl.larku.service;
 
-import java.util.List;
-
 import ttl.larku.dao.BaseDAO;
 import ttl.larku.dao.inmemory.InMemoryCourseDAO;
 import ttl.larku.domain.Course;
+
+import java.util.List;
 
 public class CourseService {
 
@@ -27,15 +27,21 @@ public class CourseService {
 		return course;
 	}
 	
-	public void deleteCourse(int id) {
+	public boolean deleteCourse(int id) {
 		Course course = courseDAO.get(id);
 		if(course != null) {
 			courseDAO.delete(course);
 		}
+		return false;
 	}
 	
-	public void updateCourse(Course course) {
-		courseDAO.update(course);
+	public boolean updateCourse(Course course) {
+		Course oldCourse = courseDAO.get(course.getId());
+		if(oldCourse != null) {
+			courseDAO.update(course);
+			return true;
+		}
+		return false;
 	}
 	
 	public Course getCourseByCode(String code) {

@@ -1,36 +1,34 @@
 package ttl.larku.dao.jpa;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import ttl.larku.dao.BaseDAO;
 import ttl.larku.domain.Student;
 
-public class JpaStudentDAO implements BaseDAO<Student> {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
-	private Map<Integer, Student> students = new HashMap<Integer, Student>();
-	private static int nextId = 0;
-	
+public class JpaStudentDAO implements BaseDAO<Student>{
+
+	private Map<Integer, Student> students = new ConcurrentHashMap<>();
+	private static AtomicInteger nextId = new AtomicInteger(1);
+
 	@Override
-	public void update(Student updateObject) {
-		if(students.containsKey(updateObject.getId())) {
-			students.put(updateObject.getId(), updateObject);
-		}
+	public boolean update(Student updateObject) {
+		return students.computeIfPresent(updateObject.getId(), (k, oldValue) -> updateObject) != null;
 	}
 
-	@Override
-	public void delete(Student student) {
-		students.remove(student.getId());
+	public boolean delete(Student student) {
+		return students.remove(student.getId()) == null;
 	}
 
 	@Override
 	public Student create(Student newObject) {
 		//Create a new Id
-		int newId = nextId++;
-		newObject.setId(newId);
+		int newId = nextId.getAndIncrement();
 		newObject.setName("Jpa" + newObject.getName());
+		newObject.setId(newId);
 		students.put(newId, newObject);
 		
 		return newObject;
@@ -45,13 +43,15 @@ public class JpaStudentDAO implements BaseDAO<Student> {
 	public List<Student> getAll() {
 		return new ArrayList<Student>(students.values());
 	}
-	
+
 	public void deleteStore() {
 		students = null;
+		nextId.set(0);
 	}
-	
+
 	public void createStore() {
-		students = new HashMap<Integer, Student>();
+		students = new ConcurrentHashMap<>();
+		nextId.set(1);
 	}
 
 	public Map<Integer, Student> getStudents() {

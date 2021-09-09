@@ -7,30 +7,30 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class InMemoryTrackDAO implements BaseDAO<Track> {
 
 	private Map<Integer, Track> tracks = new HashMap<Integer, Track>();
-	private static AtomicInteger nextId = new AtomicInteger(0);
+	private static AtomicInteger nextId = new AtomicInteger(1);
 	
 	@Override
-	public void update(Track updateObject) {
-		if(tracks.containsKey(updateObject.getId())) {
-			tracks.put(updateObject.getId(), updateObject);
-		}
+	public boolean update(Track updateObject) {
+		return tracks.computeIfPresent(updateObject.getId(), (k, oldValue) -> updateObject) != null;
 	}
 
 	@Override
-	public void delete(Track track) {
-		tracks.remove(track.getId());
+	public boolean delete(Track track) {
+		return tracks.remove(track.getId()) != null;
 	}
 
 	@Override
 	public Track create(Track newObject) {
 		//Create a new Id
-		int newId = nextId.incrementAndGet();
+		int newId = nextId.getAndIncrement();
 		newObject.setId(newId);
+		newObject.setAlbum("InMem: " + newObject.getAlbum());
 		tracks.put(newId, newObject);
 		
 		return newObject;
@@ -47,7 +47,7 @@ public class InMemoryTrackDAO implements BaseDAO<Track> {
 	}
 	
 	public Map<Integer, Track> getTracks() {
-		nextId.set(0);
+		nextId.set(1);
 		return tracks;
 	}
 
@@ -57,11 +57,11 @@ public class InMemoryTrackDAO implements BaseDAO<Track> {
 	
 	public void deleteStore() {
 		tracks = null;
-		nextId.set(0);
+		nextId.set(1);
 	}
 	
 	public void createStore() {
-		tracks = new HashMap<Integer, Track>();
-		nextId.set(0);
+		tracks = new ConcurrentHashMap<>();
+		nextId.set(1);
 	}
 }

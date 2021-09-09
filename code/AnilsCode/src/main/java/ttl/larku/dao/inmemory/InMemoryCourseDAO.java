@@ -7,27 +7,27 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class InMemoryCourseDAO implements BaseDAO<Course>{
 
-	private Map<Integer, Course> courses = new HashMap<Integer, Course>();
-	private static AtomicInteger nextId = new AtomicInteger(0);
+	private Map<Integer, Course> courses = new ConcurrentHashMap<>();
+	private static AtomicInteger nextId = new AtomicInteger(1);
 	
-	public void update(Course updateObject) {
-		if(courses.containsKey(updateObject.getId())) {
-			courses.put(updateObject.getId(), updateObject);
-		}
+	public boolean update(Course updateObject) {
+		return courses.computeIfPresent(updateObject.getId(), (k, oldValue) -> updateObject) != null;
 	}
 
-	public void delete(Course course) {
-		courses.remove(course.getId());
+	public boolean delete(Course course) {
+		return courses.remove(course.getId()) != null;
 	}
 
 	public Course create(Course newObject) {
 		//Create a new Id
-		int newId = nextId.incrementAndGet();
+		int newId = nextId.getAndIncrement();
 		newObject.setId(newId);
+		newObject.setCode("InMem" + newObject.getCode());
 		courses.put(newId, newObject);
 		
 		return newObject;
@@ -47,8 +47,8 @@ public class InMemoryCourseDAO implements BaseDAO<Course>{
 	}
 	
 	public void createStore() {
-		courses = new HashMap<Integer, Course>();
-		nextId.set(0);
+		courses = new ConcurrentHashMap<Integer, Course>();
+		nextId.set(1);
 	}
 	
 	public Map<Integer, Course> getCourses() {

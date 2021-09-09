@@ -16,6 +16,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.internal.verification.VerificationModeFactory.atMost;
 
 
@@ -53,7 +54,7 @@ public class StudentServiceMockInjectTest {
 	public void getStudentGood() throws Exception{
 		int idToTest = 1;
 		Student result = studentService.getStudent(idToTest);
-		assertEquals("Joe", result.getName());
+		assertTrue(result.getName().contains("Joe"));
 		Mockito.verify(dao, Mockito.atLeast(1)).get(idToTest);
 	}
 

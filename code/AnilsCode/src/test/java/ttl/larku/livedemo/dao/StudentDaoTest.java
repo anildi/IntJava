@@ -26,7 +26,7 @@ public class StudentDaoTest {
 
         Student inserted = studentDao.get(student.getId());
 
-        assertEquals("Joey", inserted.getName());
+        assertTrue(inserted.getName().contains("Joey"));
         assertEquals(1, studentDao.getAll().size());
     }
 

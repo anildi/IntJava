@@ -4,9 +4,9 @@ import java.util.List;
 
 public interface BaseDAO<T> {
 
-	void update(T updateObject);
+	boolean update(T updateObject);
 
-	void delete(T student);
+	boolean delete(T student);
 
 	T create(T newObject);
 

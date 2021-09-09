@@ -1,6 +1,5 @@
 package ttl.larku.service;
 
-import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ttl.larku.domain.Student;
@@ -9,6 +8,8 @@ import ttl.larku.domain.Student.Status;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 public class StudentServiceTest {
@@ -34,7 +35,7 @@ public class StudentServiceTest {
 		
 		Student result = studentService.getStudent(newStudent.getId());
 		
-		assertEquals(name1, result.getName());
+		assertTrue(result.getName().contains(name1));
 		assertEquals(1, studentService.getAllStudents().size());
 	}
 	
@@ -46,10 +47,11 @@ public class StudentServiceTest {
 		
 		assertEquals(2, studentService.getAllStudents().size());
 		
-		studentService.deleteStudent(student1.getId());
+		boolean done = studentService.deleteStudent(student1.getId());
+		assertTrue(done);
 		
 		assertEquals(1, studentService.getAllStudents().size());
-		assertEquals(name1, studentService.getAllStudents().get(0).getName());
+		assert(studentService.getAllStudents().get(0).getName().contains(name1));
 	}
 
 	@Test
@@ -61,7 +63,8 @@ public class StudentServiceTest {
 		assertEquals(2, studentService.getAllStudents().size());
 		
 		//Non existent Id
-		studentService.deleteStudent(9999);
+		boolean done = studentService.deleteStudent(9999);
+		assertFalse(done);
 		
 		assertEquals(2, studentService.getAllStudents().size());
 	}
@@ -71,9 +74,10 @@ public class StudentServiceTest {
 		Student student1 = studentService.createStudent(name1, dob1, Status.FULL_TIME, phoneNumber1);
 		
 		assertEquals(1, studentService.getAllStudents().size());
-		
+
 		student1.setName(name2);
-		studentService.updateStudent(student1);
+		boolean done = studentService.updateStudent(student1);
+		assertTrue(done);
 		
 		assertEquals(1, studentService.getAllStudents().size());
 		assertEquals(name2, studentService.getAllStudents().get(0).getName());

@@ -7,6 +7,7 @@ import ttl.larku.domain.Track;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
@@ -43,7 +44,8 @@ public class TrackServiceTest {
 		
 		assertEquals(2, trackService.getAllTracks().size());
 		
-		trackService.deleteTrack(track1.getId());
+		boolean done = trackService.deleteTrack(track1.getId());
+		assertTrue(done);
 		
 		assertEquals(1, trackService.getAllTracks().size());
 		assertTrue(trackService.getAllTracks().get(0).getTitle().contains("April"));
@@ -60,7 +62,8 @@ public class TrackServiceTest {
 		
 		assertEquals(2, trackService.getAllTracks().size());
 		
-		trackService.deleteTrack(9999);
+		boolean done = trackService.deleteTrack(9999);
+		assertFalse(done);
 		
 		assertEquals(2, trackService.getAllTracks().size());
 	}
@@ -74,7 +77,8 @@ public class TrackServiceTest {
 		assertEquals(1, trackService.getAllTracks().size());
 		
 		track1.setTitle("A Shadowy Smile");
-		trackService.updateTrack(track1);
+		boolean done = trackService.updateTrack(track1);
+		assertTrue(done);
 		
 		assertEquals(1, trackService.getAllTracks().size());
 		assertTrue( trackService.getAllTracks().get(0).getTitle().contains("Shadowy"));
