@@ -4,11 +4,13 @@ package ttl.larku.labs.exceptions;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -21,7 +23,7 @@ public class Exceptions2 {
 
     //TODO - You have to rewrite this function using
     // streams.  See further instructions below.
-    public List<String> processAddressTheOldWay() {
+    public List<String> processWithExternalIteration() {
         List<String> result = new ArrayList<>();
         for (String address : siteAddresses) {
             try {
@@ -32,6 +34,16 @@ public class Exceptions2 {
             }
         }
         return result;
+    }
+
+    @Test
+    public void testProcessWithExternalIteration() {
+        List<String> results = processWithExternalIteration();
+
+        System.out.println("Results.size: " + results.size());
+        results.forEach(System.out::println);
+
+        assertEquals(1, results.size());
     }
 
     //TODO - Part A.  This method should process a list of address and
@@ -52,12 +64,16 @@ public class Exceptions2 {
         URLConnection connection = url.openConnection();
         connection.connect();
 
-        //If we got here, we made a successful connection;
-        //We are not actually going to read anything from the connection
-        String result = "Address: " + address + ", at: " + LocalTime.now();
+        InputStream iStream = connection.getInputStream();
+
+        Scanner scanner = new Scanner(iStream);
+        String firstLine = scanner.nextLine();
+
+        iStream.close();
+
 
         connection.getInputStream().close();
-        return result;
+        return firstLine;
 
     }
 

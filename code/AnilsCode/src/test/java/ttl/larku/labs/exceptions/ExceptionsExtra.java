@@ -4,10 +4,12 @@ package ttl.larku.labs.exceptions;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -41,12 +43,15 @@ public class ExceptionsExtra {
         URLConnection connection = url.openConnection();
         connection.connect();
 
-        //If we got here, we made a successful connection;
-        //We are not actually going to read anything from the connection
-        String result = "Address: " + address + ", at: " + LocalTime.now();
+        InputStream iStream = connection.getInputStream();
+
+        Scanner scanner = new Scanner(iStream);
+        String firstLine = scanner.nextLine();
+
+        iStream.close();
 
         connection.getInputStream().close();
-        return result;
+        return firstLine;
 
     }
 

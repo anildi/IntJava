@@ -5,11 +5,13 @@ import io.vavr.control.Try;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -59,9 +61,14 @@ public class Exceptions2 {
         URLConnection connection = url.openConnection();
         connection.connect();
 
-        //make network call and get result;
-        String result = "Address: " + address + ", at: " + LocalTime.now();
-        return result;
+        InputStream iStream = connection.getInputStream();
+
+        Scanner scanner = new Scanner(iStream);
+        String firstLine = scanner.nextLine();
+
+        iStream.close();
+
+        return firstLine;
     }
 
     //TODO - Part A. Make this test run
