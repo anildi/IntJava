@@ -14,7 +14,9 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.toList;
@@ -138,6 +140,104 @@ public class LamdasStreams {
 
         long olderThan20 = students.stream()
                 .filter(s -> s.getDob().until(LocalDate.now(), ChronoUnit.YEARS) > 20).count();
+
+    }
+
+    /*
+    7. Write a method to calculate the average age of Customers who have the status
+    Restricted.
+    */
+    @Test
+    public void lab7() {
+        StudentService ss = new StudentService();
+        RegistrationApp.init(ss);
+        List<Student> students = ss.getAllStudents();
+
+        var avgAge = students.stream()
+                .mapToLong(s -> s.getDob().until(LocalDate.now(), ChronoUnit.YEARS))
+                .average();
+
+        var stats = students.stream()
+                .mapToLong(s -> s.getDob().until(LocalDate.now(), ChronoUnit.YEARS))
+                .summaryStatistics();
+        System.out.println(stats);
+
+    }
+
+    @Test
+    public void otherWaysToMakeAStream() {
+        IntStream.range(0, 10).forEach(i -> System.out.println(i));
+
+        IntStream.iterate(0, i -> i < 25, (i) -> i + 1)
+                .map(i -> i * i)
+                .forEach(System.out::println);
+    }
+    /*
+8. Write a method to return all the phone numbers of all customers. Make sure your test
+    data includes at least some customers with phone numbers.
+    */
+    @Test
+    public void lab8() {
+        StudentService ss = new StudentService();
+        RegistrationApp.init(ss);
+        List<Student> students = ss.getAllStudents();
+
+        List<String> result = students.stream()
+                .flatMap(s -> s.getPhoneNumbers().stream())
+                .collect(toList());
+
+    }
+    /*
+9. Write a method to return only the first phone number, if any, for all customers. For
+    your test data, make sure that some of your customers have multiple phone numbers,
+    and at least one customer has no phone numbers.
+     */
+    @Test
+    public void lab9() {
+        StudentService ss = new StudentService();
+        RegistrationApp.init(ss);
+        List<Student> students = ss.getAllStudents();
+
+        List<String> result = students.stream()
+                .filter(s -> s.getPhoneNumbers().size() > 0)
+                .map(s -> s.getPhoneNumbers().get(0))
+                .collect(toList());
+
+        var result1 = students.stream()
+                .map(s -> {
+                    if(s.getPhoneNumbers().size() > 0) {
+                        return Optional.of(s.getPhoneNumbers().get(0));
+                    } else {
+                        return Optional.<String>empty();
+                    }
+                })
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(toList());
+
+        System.out.println("result: " + result + ", result1: " + result1);
+
+    }
+
+    @Test
+    public void lab9_II() {
+        StudentService ss = new StudentService();
+        RegistrationApp.init(ss);
+        List<Student> students = ss.getAllStudents();
+
+
+        var result = students.stream()
+                .map(s -> s.getPhoneNumbers().stream().findFirst())
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(toList());
+
+        var result1 = students.stream()
+                .flatMap(s -> s.getPhoneNumbers().stream().findFirst().stream())
+                .collect(toList());
+
+
+        System.out.println("result: " + result + ", result1: " + result1);
 
     }
 }

@@ -16,7 +16,7 @@ public class GenericFunAndGames {
         MyThing<Integer> integerThing = new MyThing<>(22);
 
         //The types are the important things to keep track of
-        //in this examples.  We say a function maps from the
+        //in these examples.  We say a function maps from the
         //first type (the type of the argument) to the second type
         //(the return type).  The names of the functions reflect
         //the mappings  e.g from Number to Number
@@ -66,8 +66,8 @@ public class GenericFunAndGames {
         MyThing<String> s = numberThing.map(this::fun4);
         MyThing<String> s2 = numberThing.map((n) -> "" + n.intValue());
 
-        MyThing<Number> nn1 = new MyThing<>(Integer.valueOf(20));
-        MyThing<Integer> nn2 = new MyThing<>(Integer.valueOf(20));
+        MyThing<Number> nn1 = new MyThing<>(20);
+        MyThing<Integer> nn2 = new MyThing<>(20);
 
     }
 
