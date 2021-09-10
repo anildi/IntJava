@@ -2,6 +2,7 @@ package ttl.larku.labs.exceptions;
 
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -43,5 +44,14 @@ public class Exceptions1 {
 //        assertEquals(99172, count);
         });
 
+    }
+
+
+    @Test
+    public void willThrow() {
+        assertThrows(NullPointerException.class, () -> {
+            String badOne = null;
+            badOne.length();
+        });
     }
 }

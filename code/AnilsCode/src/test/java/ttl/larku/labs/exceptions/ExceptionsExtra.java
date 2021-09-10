@@ -50,7 +50,6 @@ public class ExceptionsExtra {
 
         iStream.close();
 
-        connection.getInputStream().close();
         return firstLine;
 
     }

@@ -146,7 +146,7 @@ public class ExceptionsLamdas {
                             String line = reader.readLine();
                             return line;
                         })
-                ) //.filter(Wrapper::isValue)
+                )
                 .collect(toList());
 
         return firstLines;

@@ -71,8 +71,6 @@ public class Exceptions2 {
 
         iStream.close();
 
-
-        connection.getInputStream().close();
         return firstLine;
 
     }
