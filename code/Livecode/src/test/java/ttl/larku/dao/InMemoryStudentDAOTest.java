@@ -13,9 +13,9 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 /**
  * @author whynot
  */
-public class StudentDAOTest {
+public class InMemoryStudentDAOTest {
 
-    private StudentDAO dao = new StudentDAO();
+    private InMemoryStudentDAO dao = new InMemoryStudentDAO();
 
     @Test
     public void testInsertStudent() {

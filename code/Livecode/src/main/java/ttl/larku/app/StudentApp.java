@@ -18,8 +18,10 @@ public class StudentApp {
         studentApp.getAllStudentRequest();
     }
 
+    StudentService studentService = new StudentService();
+
     public void postAStudent() {
-        StudentService studentService = new StudentService();
+//        StudentService studentService = new StudentService();
         Student student = new Student("Francine", LocalDate.of(2000, 10, 10));
 
 
@@ -35,7 +37,6 @@ public class StudentApp {
 
     public void getAllStudentRequest() {
         System.out.println("In Get Request");
-        StudentService studentService = new StudentService();
 
 
         List<Student> students = studentService.getAllStudents();
