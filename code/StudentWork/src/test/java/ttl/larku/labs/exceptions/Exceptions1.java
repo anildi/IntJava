@@ -3,6 +3,13 @@ package ttl.larku.labs.exceptions;
 
 import org.junit.jupiter.api.Test;
 
+import java.io.BufferedReader;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
@@ -33,14 +40,14 @@ public class Exceptions1 {
     @Test
     public void testTryWithResources() {
         assertThrows(ApplicationException.class, () -> {
-//        URL url = getClass().getClassLoader().getResource("wrds");
-//        Path path = Paths.get(url.toURI());
-//        BufferedReader reader = Files.newBufferedReader(path);
-//        int count = 0;
-//        while (reader.readLine() != null) {
-//            count++;
-//        }
-//        assertEquals(99172, count);
+            URL url = getClass().getClassLoader().getResource("wrds");
+            Path path = Paths.get(url.toURI());
+            BufferedReader reader = Files.newBufferedReader(path);
+            int count = 0;
+            while (reader.readLine() != null) {
+                count++;
+            }
+            assertEquals(99172, count);
         });
 
     }
