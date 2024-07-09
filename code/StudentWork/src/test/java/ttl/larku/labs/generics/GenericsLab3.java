@@ -41,7 +41,7 @@ public class GenericsLab3 {
     // class above.
     @Test
     public void testLocalDateValueHolder() {
-//        LocalDate ld = LocalDate.now();
+//        LocalDate ld = LocalDate.of(2020, 10, 10);
 //        ValueHolder vh = new ValueHolder(ld);
 //
 //        LocalDate ld2 = vh.getValue();
