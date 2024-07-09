@@ -109,4 +109,16 @@ public class GenericsLab2 {
 //        assertEquals(1, giveMe.size());
 //
 //    }
+
+//    @Test
+//    public void test5() {
+//        Llama llama = new Llama("Joey");
+//        List<Llama> llammas = new ArrayList<>();
+//        llammas.add(llama);
+//
+//        List<Object> giveMe = new ArrayList<>();
+//
+//        fromOneToTheOther(giveMe, llammas);
+//        assertEquals(1, giveMe.size());
+//    }
 }

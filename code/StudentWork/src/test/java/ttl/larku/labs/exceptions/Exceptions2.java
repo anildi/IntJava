@@ -39,7 +39,7 @@ public class Exceptions2 {
 
     /**
      * Ping the given address.  If the connection succeeds we
-     * return an ExWrapper with a value.  If we can't connect
+     * return an ExWrapper with a value.
      * If we can't connect we return an ExWrapper with an
      * Exception.
      * @param address
