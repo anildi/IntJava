@@ -22,6 +22,12 @@ public class Student implements Comparable<Student>{
     private String name;
     private LocalDate dob;
 
+    private String blah;
+    public String getBlah() {
+        return "blah";
+    }
+
+
     private Status status;
     //private String [] phoneNumbers = new String[10];
     private List<String> phoneNumbers = new ArrayList<>();
