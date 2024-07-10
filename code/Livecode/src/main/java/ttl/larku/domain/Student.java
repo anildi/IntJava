@@ -29,25 +29,21 @@ public class Student {
         this.name = name;
         this.dob = dob;
         this.status = status;
-        this.phoneNumbers = phoneNumbers;
+        if(phoneNumbers != null) {
+            this.phoneNumbers.addAll(phoneNumbers);
+        }
     }
 
-    public Student(int id, String name, LocalDate dob) {
-        this(id, name, dob, Status.FULL_TIME, new ArrayList<>());
-//        this.id = id;
-//        this.name = name;
-//        this.dob = dob;
-//        this.status = Status.FULL_TIME;
-//        this.phoneNumbers = new ArrayList<>();
+    public Student(String name, LocalDate dob, Status status, List<String> phoneNumbers) {
+        this(0, name, dob, status, phoneNumbers);
+    }
+
+    public Student(String name, LocalDate dob, Status status) {
+        this(0, name, dob, status, new ArrayList<>());
     }
 
     public Student(String name, LocalDate dob) {
         this(0, name, dob, Status.FULL_TIME, new ArrayList<>());
-//        this.id = id;
-//        this.name = name;
-//        this.dob = dob;
-//        this.status = Status.FULL_TIME;
-//        this.phoneNumbers = new ArrayList<>();
     }
 
 //    private void init(int id, String name, LocalDate dob, Status status, List<String> phoneNumbers) {
@@ -95,11 +91,13 @@ public class Student {
     }
 
     public List<String> getPhoneNumbers() {
-        return phoneNumbers;
+        return List.copyOf(phoneNumbers);
     }
 
     public void setPhoneNumbers(List<String> phoneNumbers) {
-        this.phoneNumbers = phoneNumbers;
+        if(phoneNumbers != null) {
+            this.phoneNumbers.addAll(phoneNumbers);
+        }
     }
 
     @Override
