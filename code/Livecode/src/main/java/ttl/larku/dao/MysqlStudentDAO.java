@@ -24,7 +24,7 @@ public class MysqlStudentDAO implements StudentDAO{
         //jint id = nextId++;
         int id = nextId.getAndIncrement();
         student.setId(id);
-        student.setName("Mysql " + student.getName());
+//        student.setName("Mysql " + student.getName());
         students.put(student.getId(), student);
 
         return student;
