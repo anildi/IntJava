@@ -4,10 +4,12 @@ import ttl.larku.domain.Student;
 import ttl.larku.service.StudentService;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static java.lang.System.out;
 
@@ -19,6 +21,18 @@ public class StreamsApp {
     public static void main(String[] args) {
         StreamsApp sortingApp = new StreamsApp();
         sortingApp.composeOperationsWithStream();
+    }
+
+    public void findAge() {
+        StudentService service = new StudentService();
+        DBInit.populateStudents(service);
+
+        List<Student> students = service.getAllStudents();
+
+        Student s1 = students.get(0);
+
+        long age = s1.getDob().until(LocalDate.now(), ChronoUnit.YEARS);
+
     }
 
     public void composeOperationsWithStream() {
@@ -35,11 +49,21 @@ public class StreamsApp {
         }
 
         List<String> namesOnly = students.stream()
+                .peek(s -> out.println("Peek1: " + s))
                 .filter(s -> s.getName().startsWith("M"))
+                .peek(s -> out.println("Peek2: " + s))
                 .map(s -> s.getName())
+                .peek(s -> out.println("Peek3: " + s))
                 .toList();
 
-        namesOnly.forEach(out::println);
+//        namesOnly.forEach(out::println);
+        var st = students.stream()
+                .peek(s -> out.println("Peek1: " + s))
+                .filter(s -> s.getName().startsWith("M"))
+//                .peek(s -> out.println("Peek2: " + s))
+//                .map(s -> s.getName())
+                .peek(s -> out.println("Peek3: " + s))
+                .count();
 
     }
 
