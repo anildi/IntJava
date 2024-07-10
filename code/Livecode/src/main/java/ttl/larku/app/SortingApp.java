@@ -39,12 +39,37 @@ public class SortingApp {
 
         NameComparator nc = new NameComparator();
 
-        DobComparator dc = new DobComparator();
+        Comparator<Student> nc2 = new Comparator<Student>() {
+            @Override
+            public int compare(Student student1, Student student2) {
+                return student1.getName().compareTo(student2.getName());
+            }
+        };
 
-        //Collections.sort(students, nc);
-        Collections.sort(students, dc);
+        Comparator<Student> nc3 = (Student student1, Student student2) -> {
+            return student1.getName().compareTo(student2.getName());
+        };
+
+        Comparator<Student> nc4 = (student1, student2) -> {
+            return student1.getName().compareTo(student2.getName());
+        };
+
+        Comparator<Student> nc5 = (x1, x2) -> x1.getName().compareTo(x2.getName());
+
+        Collections.sort(students, (student1, student2) -> student1.getName().compareTo(student2.getName()));
+
+        Collections.sort(students, (student1, student2) -> student1.getDob().compareTo(student2.getDob()));
 
         students.forEach(out::println);
+    }
+
+
+    class NameComparator implements Comparator<Student> {
+
+        @Override
+        public int compare(Student student1, Student student2) {
+            return student1.getName().compareTo(student2.getName());
+        }
     }
 
     class DobComparator implements Comparator<Student> {
@@ -52,19 +77,11 @@ public class SortingApp {
         @Override
         public int compare(Student student1, Student student2) {
             int result = student1.getDob().compareTo(student2.getDob());
-            if(result == 0) {
+            if (result == 0) {
                 result = student1.getName().compareTo(student2.getName());
             }
 
             return result;
-        }
-    }
-
-    class NameComparator implements Comparator<Student> {
-
-        @Override
-        public int compare(Student student1, Student student2) {
-            return student1.getName().compareTo(student2.getName());
         }
     }
 
