@@ -1,6 +1,7 @@
 package ttl.larku.app;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -64,6 +65,8 @@ public class GenericsDemo {
         lInts.forEach(System.out::println);
     }
 
+    //PECS  -> Producer Extends, Consumer Super
+
     public double sum(List<? extends Number> input) {
 //       input.add(23.456);
 
@@ -82,6 +85,23 @@ public class GenericsDemo {
         for (T it : arr) {
             input.add(it);
         }
+    }
+
+
+    static int frequency(Collection<?> c, Object o) {
+        int result = 0;
+        for(Object obj : c) {
+            if(obj.equals(o)) {
+                result++;
+            }
+        }
+
+        return result;
+    }
+
+    public static <T> void copy(List<? super T> dest,
+                                List<? extends T> src) {
+
     }
 
     public void go() {
