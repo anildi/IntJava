@@ -1,10 +1,12 @@
 package ttl.larku.tryexceptions;
 
 import io.vavr.control.Try;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.Arrays;
 import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +29,7 @@ public class TryVavrExceptions {
      * In this case we are going to use Try from the Vavr library
      *
      * @param fileNames
-     * @return  A list of TryWrap<String> objects.
+     * @return A list of TryWrap<String> objects.
      */
     public static List<Try<String>> filesWithExceptionsVavr(List<String> fileNames) {
         List<Try<String>> firstChars = fileNames.stream()
@@ -51,8 +53,8 @@ public class TryVavrExceptions {
                 .map(tw -> tw.map(String::toUpperCase))
                 .forEach(tw -> {
                     tw.onSuccess(firstLine -> {//send to DB
-                        System.out.println(firstLine);
-                    })
+                                System.out.println(firstLine);
+                            })
                             .orElseRun(e -> {
                                 logger.error(e.toString());
                             });
